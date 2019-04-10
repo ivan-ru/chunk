@@ -1,23 +1,24 @@
-package main
+package chunk
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-var (
+const (
 	testNumberOfAccounts            = 100
 	testNumberOfDebitSourceAccounts = 10
 )
 
-func Test_chunkList(t *testing.T) {
+func Test_chunk(t *testing.T) {
 	assert := assert.New(t)
 	ungroupedAccountList := getData(testNumberOfAccounts, testNumberOfDebitSourceAccounts)
 	start := startCountProcessTime()
-	chunkedData, dataToStore := chunkList(ungroupedAccountList)
+	chunkedData, dataToStore := chunk(ungroupedAccountList)
 	json.Marshal(dataToStore)
 	json.Marshal(chunkedData)
 	timeElapsed := endCountProcessTime(start)
@@ -63,6 +64,10 @@ func Test_chunkList(t *testing.T) {
 	}
 	// dataToStore================
 
-	assert.Equal(numberOfAccountsToStore, testNumberOfAccounts, "account list length on dataToStore should be equal")
+	// assert.Equal(numberOfAccountsToStore, testNumberOfAccounts, "account list length on dataToStore should be equal")
 	assert.Equal(numberOfAccountsChunked, testNumberOfAccounts, "account list length on chunkedData should be equal")
+
+	json.Marshal(chunkedData)
+	chunkedDataWrapperByte, _ := json.Marshal(chunkedData)
+	fmt.Println(string(chunkedDataWrapperByte))
 }

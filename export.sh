@@ -1,3 +1,3 @@
 cd ../..
 export GOPATH=$(pwd)
-cd src/playground
+cd src/chunk

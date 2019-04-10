@@ -1,7 +1,13 @@
-package main
+package chunk
 
 import (
 	"time"
+)
+
+const (
+	numberOfAccount            = 100
+	numberOfDebitSourceAccount = 10
+	maxJob                     = 10
 )
 
 var (
@@ -13,8 +19,29 @@ var (
 	lastLoop                                   bool
 )
 
-// chunkList ...
-func chunkList(ungroupedAccountList []autoCreditHistory) (chunkedDataWrapper [][][]autoCreditHistory, dataToStore []accountGroup) {
+type (
+	accountGroup struct {
+		DebitSourceAccount string              `json:"debit_source_account"`
+		AutoCreditDate     time.Time           `json:"auto_credit_date"`
+		Account            []autoCreditHistory `json:"account"`
+	}
+	autoCreditHistory struct {
+		AccountNumber      string    `json:"account_number" orm:"column(account_number);pk"`
+		AutoCreditDate     time.Time `json:"auto_credit_date" orm:"column(auto_credit_date)"`
+		DebitSourceAccount string    `json:"debit_source_account" orm:"column(debit_source_account)"`
+		TargetAmount       float64   `json:"target_amount" orm:"column(target_amount)"`
+		TransactionAmount  float64   `json:"transaction_amount" orm:"column(transaction_amount)"`
+		TransactionStatus  string    `json:"transaction_status" orm:"column(transaction_status)"`
+		AvailableBalance   float64   `json:"available_balance" orm:"column(available_balance)"`
+		EndingBalance      float64   `json:"ending_balance" orm:"column(ending_balance)"`
+		NextAutoCreditDate time.Time `json:"next_auto_credit_date" orm:"column(next_auto_credit_date)"`
+		AutoCreditOption   string    `json:"auto_credit_option" orm:"column(auto_credit_option)"`
+		AccountOpeningDate string    `json:"account_opening_date" orm:"column(account_opening_date)"`
+	}
+)
+
+// chunk ...
+func chunk(ungroupedAccountList []autoCreditHistory) (chunkedDataWrapper [][][]autoCreditHistory, dataToStore []accountGroup) {
 	accountListGrouped := make(map[string][]autoCreditHistory)
 	for _, val := range ungroupedAccountList {
 		accountListGrouped[val.DebitSourceAccount] = append(accountListGrouped[val.DebitSourceAccount], val)
