@@ -41,22 +41,22 @@ type (
 )
 
 // chunk ...
-func chunk(ungroupedAccountList []autoCreditHistory) (chunkedDataWrapper [][][]autoCreditHistory, dataToStore []accountGroup) {
+func chunk(ungroupedAccountList []autoCreditHistory) (chunkedDataWrapper [][][]autoCreditHistory) {
 	accountListGrouped := make(map[string][]autoCreditHistory)
 	for _, val := range ungroupedAccountList {
 		accountListGrouped[val.DebitSourceAccount] = append(accountListGrouped[val.DebitSourceAccount], val)
 	}
 
-	for key, val := range accountListGrouped {
+	for _, val := range accountListGrouped {
 		if loopCount == len(accountListGrouped)-1 {
 			lastLoop = true
 		}
-		newAccountGroup := accountGroup{
-			DebitSourceAccount: key,
-			AutoCreditDate:     time.Now(),
-			Account:            val,
-		}
-		dataToStore = append(dataToStore, newAccountGroup) //data to store to db later as history
+		// newAccountGroup := accountGroup{
+		// 	DebitSourceAccount: key,
+		// 	AutoCreditDate:     time.Now(),
+		// 	Account:            val,
+		// }
+		// dataToStore = append(dataToStore, newAccountGroup) //data to store to db later as history
 
 		// fmt.Println("(len(val) + chunkedDataTempPerDebitSourceAccountLength)")
 		// fmt.Println((len(val) + chunkedDataTempPerDebitSourceAccountLength))
