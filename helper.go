@@ -23,8 +23,6 @@ func getData(numberOfAccountData int, numberOfDebitSourceAccount int) (accountLi
 			AutoCreditOption:   "daily",
 		}
 		newAccount.DebitSourceAccount = strconv.Itoa(randInt(1, numberOfDebitSourceAccount))
-		// fmt.Print(" = ")
-		// fmt.Println(newAccount.DebitSourceAccount)
 		accountList = append(accountList, newAccount)
 	}
 	timeElapsed := endCountProcessTime(start)
@@ -37,7 +35,6 @@ func getData(numberOfAccountData int, numberOfDebitSourceAccount int) (accountLi
 func randInt(min int, max int) (randomNumber int) {
 	rand.Seed(time.Now().UnixNano())
 	randomNumber = min + rand.Intn(max-min)
-	// fmt.Print(randomNumber)
 	return
 }
 
